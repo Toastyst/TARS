@@ -1,6 +1,6 @@
 # TARS System Design Summary — July 2026
 
-**Full document:** `C:\TARS\.design\grok-design-doc-90cbc947.md`  
+**Full document:** [design/TARS-DESIGN.md](TARS-DESIGN.md)  
 **Status:** Revised — post-review Pass 2 (90cbc947)  
 **Date:** 2026-07-03
 
