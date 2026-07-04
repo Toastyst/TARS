@@ -1,8 +1,8 @@
 # TARS System Design Summary — July 2026
 
 **Full document:** [design/TARS-DESIGN.md](TARS-DESIGN.md)  
-**Status:** Revised — post-review Pass 2 (90cbc947)  
-**Date:** 2026-07-03
+**Status:** Revised — post-review Pass 2 (90cbc947); implementation update **2026-07-04**  
+**Date:** 2026-07-03 (design)
 
 ---
 
@@ -63,32 +63,46 @@ tars-agent (private)          TARS (public workspace)
 
 ---
 
+## Implementation progress (Jul 2026)
+
+| Done | Deferred / pending |
+|------|-------------------|
+| PR-1 TARS scaffold, PR-3 design docs | PR-2 `tars-agent` + Hermes install |
+| PR-10 partial: Pokemon cluster, emote stub | PR-4–8 skills, bench, voice, SearXNG |
+| `TARS` public on GitHub | `TARS_JEEP` archive (after DB purge) |
+
+Hermes profile install and OpenRouter smoke test **deferred** — limited time/budget.
+
+---
+
 ## PR plan — 12 PRs
 
-| PR | Title | Repo | Depends |
-|----|-------|------|---------|
-| 1 | Initialize TARS scaffold (**allow-list only**) | TARS | — |
-| 2 | Bootstrap Hermes profile + Hermes-aligned **config.yaml** (`0.0.1`) + smoke test | tars-agent | — |
-| 3 | Add design docs (`.design/` → `design/`) | TARS | PR-1 |
-| 4 | Migrate **local OpenRouter** bench | TARS | PR-1 |
-| 5 | Salvage voice module | TARS | PR-4 |
-| 6 | SearXNG docker (**localhost bind**, no pipelines) | TARS | PR-1 |
-| 7 | weather (geocode+forecast) + trail-search scripts | tars-agent | PR-2, PR-6 |
-| 8 | User-authored SOUL.md v0.1 | tars-agent | PR-2 |
-| 9 | Scaffold L5/L6/L7/L8 plugin docs | TARS | PR-3 |
-| 10 | GitHub cleanup (**full inventory**, mandatory BFG) | GitHub | PR-4–7, **PR-11** |
-| 11 | Hermes setup docs + env file mapping | TARS | PR-7, PR-8 |
-| 12 | trip-plan stub *(post-v0.1)* | tars-agent | PR-7, PR-8, PR-11 |
+| PR | Title | Repo | Status |
+|----|-------|------|--------|
+| 1 | Initialize TARS scaffold (**allow-list only**) | TARS | **Done** |
+| 2 | Bootstrap Hermes profile + **config.yaml** (`0.0.1`) + smoke test | tars-agent | **Deferred** |
+| 3 | Add design docs → `design/` | TARS | **Done** |
+| 4 | Migrate **local OpenRouter** bench | TARS | Pending |
+| 5 | Salvage voice module | TARS | Pending |
+| 6 | SearXNG docker (**localhost bind**, no pipelines) | TARS | Pending |
+| 7 | weather + trail-search scripts | tars-agent | Pending |
+| 8 | User-authored SOUL.md v0.1 | tars-agent | Pending |
+| 9 | Scaffold L5/L6/L7/L8 plugin docs | TARS | Pending |
+| 10 | GitHub cleanup | GitHub | **Partial** (Pokemon + emotes done; TARS_JEEP pending) |
+| 11 | Hermes setup docs | TARS | Pending |
+| 12 | trip-plan stub *(post-v0.1)* | tars-agent | Pending |
 
-**Critical path:** PR-1 → PR-2 (smoke) → PR-6 → PR-7 → PR-8 → PR-11 → **v0.1.0**  
-**Post-v0.1:** PR-12 (v0.2.0)
+**Critical path:** PR-1 ✅ → PR-2 (smoke) → PR-6 → PR-7 → PR-8 → PR-11 → **v0.1.0**  
+**Next when resuming:** PR-2 (`tars-agent` bootstrap)
 
 ---
 
 ## First milestone (Definition of Done)
 
-- [ ] PR-2 smoke test: `tars chat` text-only before skills
-- [ ] `terminal.cwd` / `TARS_WORKSPACE` loads `AGENTS.md`
+- [x] `TARS` public repo + design doc on GitHub
+- [x] Pokemon cluster GitHub cleanup (early PR-10)
+- [ ] PR-2 smoke test: `tars chat` text-only before skills — **deferred**
+- [ ] `terminal.cwd` / `TARS_WORKSPACE` loads `AGENTS.md` — **deferred**
 - [ ] `weather` skill geocodes place names via Nominatim
 - [ ] `trail-search` uses `search.py` → SearXNG at `127.0.0.1:8080`
 - [ ] User `SOUL.md` merged (PR-8); not Hermes default boilerplate

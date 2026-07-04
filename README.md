@@ -29,4 +29,4 @@ Setup guide: `docs/hermes-setup.md` (coming in PR-11).
 
 ## Status
 
-July 2026 — design approved; implementing PR-1 through PR-11. Text-first on MacBook Boot Camp; voice and Jeep hardware layers deferred.
+July 2026 — design approved; **Phase 0 partial:** `TARS` repo + design doc live (PR-1, PR-3). GitHub hygiene done for Pokemon cluster and emote stub (PR-10 partial). **`tars-agent` / Hermes install deferred** until time and API budget allow. Text-first on MacBook Boot Camp; voice and Jeep hardware layers deferred.

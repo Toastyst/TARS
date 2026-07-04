@@ -14,7 +14,7 @@ See [design/TARS-DESIGN.md](design/TARS-DESIGN.md) for the full system design (J
 | L1 | Hermes Agent runtime | Active |
 | L2 | LLM (OpenRouter) | Active |
 | L3 | Voice (Hermes voice layer) | Deferred |
-| L4 | Trip context (weather, search) | In progress |
+| L4 | Trip context (weather, search) | Planned (blocked on `tars-agent`) |
 | L5 | Group GPS (ATAK + Meshtastic) | Planned |
 | L6 | Radio intel (GMRS/CB RAG pattern) | Planned |
 | L7 | Vehicle (OBD2) | Planned |

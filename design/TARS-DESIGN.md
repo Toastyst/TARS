@@ -4,9 +4,9 @@
 | Field | Value |
 |-------|-------|
 | **Author** | Toastyst (design session) |
-| **Status** | Revised — post-review Pass 2 (90cbc947) |
-| **Date** | 2026-07-03 |
-| **Repos** | `Toastyst/tars-agent` (private), `Toastyst/TARS` (new), `Toastyst/TARS_JEEP` (archive) |
+| **Status** | Revised — post-review Pass 2 (90cbc947); **implementation update July 2026** |
+| **Date** | 2026-07-03 (design); **2026-07-04** (status refresh) |
+| **Repos** | `Toastyst/TARS` (public, live), `Toastyst/tars-agent` (planned, deferred), `Toastyst/TARS_JEEP` (archive pending) |
 | **Runtime** | [Hermes Agent](https://hermes-agent.nousresearch.com/) ≥ 0.12.0 |
 
 ---
@@ -16,6 +16,22 @@
 **TARS** (Trail Assistance & Reasoning System) is a voice-first, proactive AI companion for off-road trail and road-trip use in a Jeep Cherokee context. The north-star persona is movie TARS from *Interstellar* — witty, reliable, mission-focused — but the engineering goal is pragmatic: compose proven open-source layers into a dependable trailmate that keeps the driver and trail group informed, connected, and safe.
 
 This document defines the **July 2026 system design**: migrate from ad-hoc prototypes (`tars_test_bench.py`, `TARS_JEEP`) to a **two-repo Hermes architecture** with a clear layer map (L0–L8), salvage plan, and phased rollout. Implementation follows design approval; no greenfield rewrite of the voice loop.
+
+### Implementation status (July 2026)
+
+| Area | Status | Notes |
+|------|--------|-------|
+| **TARS repo** (PR-1, PR-3) | **Done** | [Toastyst/TARS](https://github.com/Toastyst/TARS) — scaffold + `design/` on `main` |
+| **tars-agent** (PR-2) | **Deferred** | Hermes profile install/bootstrap when time/budget allow |
+| **Hermes smoke test** | **Deferred** | `hermes profile install` + `tars chat` not run yet |
+| **GitHub hygiene — Pokemon cluster** | **Done** (early) | Duplicates deleted; [pokemon-agent](https://github.com/Toastyst/pokemon-agent) recreated flat (July 4 clean commit) |
+| **GitHub hygiene — emote stub** | **Done** | `toast-emotes-portfolio` deleted; `twitch-emotes-portfolio` kept |
+| **GitHub hygiene — TARS_JEEP** | **Pending** | Still live; archive **after** mandatory DB history purge |
+| **GitHub hygiene — Arcane stubs** | **Partial** | `arcane-engine` (public) gone; `ArcaneEngine` (private) still active |
+| **Bench / voice / SearXNG** (PR-4–6) | **Pending** | Local bench still at workspace root, not migrated |
+| **L4 skills + SOUL.md** (PR-7–8) | **Pending** | Blocked on `tars-agent` bootstrap |
+
+**Constraint (July 2026):** Limited time and API budget — Phase 0 focuses on repo hygiene and design truth; Hermes runtime work resumes when affordable.
 
 ---
 
@@ -378,21 +394,25 @@ flowchart TD
 
 ### GitHub repo cleanup plan (verified inventory — PR-10)
 
-| Repo | Visibility | Action | Canonical replacement / notes |
-|------|------------|--------|----------------------------|
-| **CREATE** `tars-agent` | Private | Create | Hermes profile distribution |
-| **CREATE** `TARS` | **Public** (decided — see KD-11) | Create | Project workspace; persona stays in private `tars-agent` |
-| **ARCHIVE** `TARS_JEEP` | Public | Archive **after mandatory DB history purge** | Redirect README → `TARS` + `tars-agent` |
-| **DELETE** `toast-emotes-portfolio` | Public | Delete | README-only (141 B); canonical emote site is `twitch-emotes-portfolio` |
-| **KEEP** `twitch-emotes-portfolio` | Public | Keep | HTML emote portfolio site |
-| **ARCHIVE** `arcane-engine` | Public | Archive | Unused public stub |
-| **ARCHIVE** `ArcaneEngine` | Private | Archive | Unused private duplicate |
-| **KEEP** `pokemon-agent` | — | Keep | Canonical Pokemon agent repo |
-| **ARCHIVE** `pokemon-standalone-agent` | — | Archive | Duplicate |
-| **ARCHIVE** `pokemon-agent-fork` | — | Archive | Duplicate |
-| **ARCHIVE** `Toasts-Pokemon-Agent` | — | Archive | Duplicate |
-| **KEEP** `grok-vault` | Private | Keep | Planning source |
-| **KEEP** HelloKnight, portfolios, SpaghettiStories | — | Keep | Unrelated active projects |
+Status refresh **2026-07-04**. Pokemon cluster and emote stub cleaned early (outside strict PR-10 gate). TARS-specific archive steps remain.
+
+| Repo | Visibility | Action | Status (Jul 2026) | Canonical replacement / notes |
+|------|------------|--------|-----------------|----------------------------|
+| **CREATE** `tars-agent` | Private | Create | **Deferred** | Hermes profile distribution — when Hermes bootstrap resumes |
+| **CREATE** `TARS` | **Public** (KD-11) | Create | **Done** | [Toastyst/TARS](https://github.com/Toastyst/TARS) — scaffold + design |
+| **ARCHIVE** `TARS_JEEP` | Public | Archive **after mandatory DB history purge** | **Pending** | Redirect README → `TARS` + `tars-agent` |
+| **DELETE** `toast-emotes-portfolio` | Public | Delete | **Done** | Canonical emote site is `twitch-emotes-portfolio` |
+| **KEEP** `twitch-emotes-portfolio` | Public | Keep | **Done** | HTML emote portfolio site |
+| **ARCHIVE** `arcane-engine` | Public | Archive | **Done** | Repo removed / no longer listed |
+| **ARCHIVE** `ArcaneEngine` | Private | Archive | **Pending** | Unused private stub still exists |
+| **KEEP** `pokemon-agent` | Public | Keep (clean) | **Done** | Recreated flat July 4 (`Initial clean commit`); no submodule junk |
+| **DELETE** `pokemon-standalone-agent` | Private | Delete | **Done** | Merged then removed |
+| **DELETE** `pokemon-agent-fork` | Private | Delete | **Done** | Merged then removed |
+| **DELETE** `Toasts-Pokemon-Agent` | Public | Delete | **Done** | Superseded by clean `pokemon-agent` |
+| **KEEP** `grok-vault` | Private | Keep | **Done** | Planning source |
+| **KEEP** HelloKnight, portfolios, SpaghettiStories | — | Keep | **Done** | Unrelated active projects |
+
+**Pokemon cleanup note:** Messy layout was caused by `git init` at `/home/toast/projects/` (parent workspace). Fix was delete + fresh repo with flat root — git history intentionally discarded. See `pokemon-agent` July 4 commit. **Prevention:** always `pwd` inside project root before `git push`.
 
 **TARS_JEEP archive prerequisite (mandatory):** `webui.db` (~1.5 MB) and `chroma.sqlite3` exist in git history. Archiving without purge **still exposes** committed blobs. **Required** before archive: BFG Repo-Cleaner or `git filter-repo` to remove `*.db`, `*.sqlite3`, `__pycache__/`, then force-push; **or** replace with a fresh repo containing only redirect README + license (no history import).
 
@@ -583,10 +603,12 @@ Per NVIDIA Streaming Data → RAG pattern:
 ### Phase 0 — Foundation (July 2026, weeks 1–2)
 
 - [ ] User writes `SOUL.md` v0.1 (humor setting, trail context, boundaries)
-- [ ] Create `tars-agent` private repo + `distribution.yaml`
-- [ ] Create `TARS` public repo + `AGENTS.md`
-- [ ] `hermes profile install` verified on MacBook Boot Camp (PR-2 smoke test: text-only chat before L4 skills)
-- [ ] Text chat works with OpenRouter; `AGENTS.md` loads via `terminal.cwd`
+- [ ] Create `tars-agent` private repo + `distribution.yaml` — **deferred**
+- [x] Create `TARS` public repo + `AGENTS.md` — **done** (2026-07-03)
+- [x] Approved system design committed to `TARS/design/` — **done** (PR-3)
+- [x] GitHub hygiene: Pokemon cluster + `toast-emotes-portfolio` — **done** (2026-07-04, early)
+- [ ] `hermes profile install` verified on MacBook Boot Camp — **deferred** (PR-2 smoke test)
+- [ ] Text chat works with OpenRouter; `AGENTS.md` loads via `terminal.cwd` — **deferred**
 
 ### Phase 1 — Trip context (July–August 2026)
 
@@ -718,7 +740,7 @@ Ordered pull requests for repo cleanup, Hermes bootstrap, and first skills. Depe
 
 ---
 
-### PR-1: `chore: initialize TARS project repo scaffold`
+### PR-1: `chore: initialize TARS project repo scaffold` — **DONE** (2026-07-03)
 
 | Field | Value |
 |-------|-------|
@@ -735,7 +757,7 @@ Ordered pull requests for repo cleanup, Hermes bootstrap, and first skills. Depe
 
 ---
 
-### PR-2: `feat(tars-agent): bootstrap Hermes profile distribution`
+### PR-2: `feat(tars-agent): bootstrap Hermes profile distribution` — **DEFERRED**
 
 | Field | Value |
 |-------|-------|
@@ -754,14 +776,14 @@ Ordered pull requests for repo cleanup, Hermes bootstrap, and first skills. Depe
 
 ---
 
-### PR-3: `docs: add approved system design to TARS/design`
+### PR-3: `docs: add approved system design to TARS/design` — **DONE** (2026-07-03)
 
 | Field | Value |
 |-------|-------|
 | **Repo** | `Toastyst/TARS` |
 | **Depends on** | PR-1 |
-| **Files** | `design/grok-design-doc-90cbc947.md`, `design/grok-design-summary-90cbc947.md` |
-| **Description** | Copy from workspace `C:\TARS\.design\` → repo `design/` (no leading dot). Local `.design/` remains gitignored in workspace; committed canonical copy lives at `design/`. |
+| **Files** | `design/TARS-DESIGN.md`, `design/TARS-DESIGN-SUMMARY.md` |
+| **Description** | Committed canonical copy at `design/` (workspace `.design/` remains gitignored). This status refresh (2026-07-04) updates implementation progress in the same files. |
 
 ---
 
@@ -833,14 +855,18 @@ Ordered pull requests for repo cleanup, Hermes bootstrap, and first skills. Depe
 
 ---
 
-### PR-10: `chore: GitHub repo cleanup — delete and archive`
+### PR-10: `chore: GitHub repo cleanup — delete and archive` — **PARTIAL** (2026-07-04)
 
 | Field | Value |
 |-------|-------|
 | **Repo** | GitHub org/user settings + `TARS_JEEP` |
-| **Depends on** | PR-4, PR-5, PR-6, PR-7, **PR-11** |
+| **Depends on** | ~~PR-4–7, PR-11~~ for Pokemon/emote items (completed early); **TARS_JEEP** still requires purge + optional PR-11 |
 | **Files** | `TARS_JEEP/README.md` (archive notice only) |
-| **Description** | Execute verified inventory table (GitHub repo cleanup plan). **Mandatory** BFG/`git filter-repo` on `TARS_JEEP` to remove `*.db`, `*.sqlite3`, `__pycache__/` from history before archive. Delete `toast-emotes-portfolio` (keep `twitch-emotes-portfolio`). Archive `arcane-engine`, `ArcaneEngine`, 3 Pokemon duplicates (keep `pokemon-agent`). Add redirect README → `Toastyst/TARS` + `Toastyst/tars-agent`. Archive `TARS_JEEP`. **Do not archive until PR-11 setup docs merged.** |
+| **Description** | Execute verified inventory table (GitHub repo cleanup plan). |
+
+**Completed (Jul 2026):** `toast-emotes-portfolio` deleted; Pokemon duplicates deleted; `pokemon-agent` recreated clean; `arcane-engine` (public) removed.
+
+**Remaining:** **Mandatory** BFG/`git filter-repo` on `TARS_JEEP` before archive; archive `ArcaneEngine` (private); redirect README on `TARS_JEEP` → `Toastyst/TARS` + `Toastyst/tars-agent`. PR-11 setup docs recommended before `TARS_JEEP` archive but no longer blocks non-TARS cleanup. |
 
 ---
 
@@ -915,6 +941,8 @@ flowchart TD
 **Total PRs: 12**
 
 **Critical path:** PR-1 → PR-2 (smoke test) → PR-6 → PR-7 → PR-8 → PR-11 → tag **v0.1.0** (first usable TARS chat with skills + persona)
+
+**Progress (Jul 2026):** PR-1 ✅ PR-3 ✅ PR-10 partial ✅ — **next when resuming:** PR-2 (`tars-agent` bootstrap).
 
 **User gate:** PR-8 (SOUL.md) must be authored by user before declaring v0.1 production-ready.
 
